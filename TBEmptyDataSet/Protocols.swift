@@ -9,6 +9,7 @@
 import UIKit
 
 public protocol TBEmptyDataSetDataSource {
+    func imageViewForEmptyDataSet(in scrollView: UIScrollView) -> UIImageView?
     func imageForEmptyDataSet(in scrollView: UIScrollView) -> UIImage?
     func titleForEmptyDataSet(in scrollView: UIScrollView) -> NSAttributedString?
     func descriptionForEmptyDataSet(in scrollView: UIScrollView) -> NSAttributedString?
@@ -36,6 +37,10 @@ public protocol TBEmptyDataSetDelegate {
 }
 
 public extension TBEmptyDataSetDataSource {
+    func imageViewForEmptyDataSet(in scrollView: UIScrollView) -> UIImageView? {
+        return nil
+    }
+
     func imageForEmptyDataSet(in scrollView: UIScrollView) -> UIImage? {
         return nil
     }

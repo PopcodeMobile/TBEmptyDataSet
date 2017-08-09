@@ -71,6 +71,10 @@ extension UIScrollView {
     }
 
     // MARK: - Data source and delegate getters
+    fileprivate func emptyDataSetImageView() -> UIImageView? {
+        return emptyDataSetDataSource?.imageViewForEmptyDataSet(in: self)
+    }
+
     fileprivate func emptyDataSetImage() -> UIImage? {
         return emptyDataSetDataSource?.imageForEmptyDataSet(in: self)
     }
@@ -214,7 +218,9 @@ extension UIScrollView {
         if let customView = emptyDataSetCustomView() {
             emptyDataView.customView = customView
         } else {
-            if let imageTintColor = emptyDataSetImageTintColor() {
+            if let customImageView = emptyDataSetImageView() {
+                emptyDataView.imageView = customImageView
+            } else if let imageTintColor = emptyDataSetImageTintColor() {
                 emptyDataView.imageView.image = emptyDataSetImage()?.withRenderingMode(.alwaysTemplate)
                 emptyDataView.imageView.tintColor = imageTintColor
             } else {
