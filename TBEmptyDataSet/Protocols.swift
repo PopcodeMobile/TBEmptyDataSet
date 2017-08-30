@@ -27,13 +27,12 @@ public protocol TBEmptyDataSetDelegate {
     func emptyDataSetShouldDisplay(in scrollView: UIScrollView) -> Bool
     func emptyDataSetTapEnabled(in scrollView: UIScrollView) -> Bool
     func emptyDataSetScrollEnabled(in scrollView: UIScrollView) -> Bool
-
     func emptyDataSetDidTapEmptyView(in scrollView: UIScrollView)
-
     func emptyDataSetWillAppear(in scrollView: UIScrollView)
     func emptyDataSetDidAppear(in scrollView: UIScrollView)
     func emptyDataSetWillDisappear(in scrollView: UIScrollView)
     func emptyDataSetDidDisappear(in scrollView: UIScrollView)
+    func emptyDataSetShouldForceDisplayImageView(in scrollView: UIScrollView) -> Bool
 }
 
 public extension TBEmptyDataSetDataSource {
@@ -105,5 +104,9 @@ public extension TBEmptyDataSetDelegate {
 
     func emptyDataSetDidDisappear(in scrollView: UIScrollView) {
 
+    }
+
+    func emptyDataSetShouldForceDisplayImageView(in scrollView: UIScrollView) -> Bool {
+        return false
     }
 }
