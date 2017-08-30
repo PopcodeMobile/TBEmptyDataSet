@@ -111,6 +111,10 @@ extension UIScrollView {
         return emptyDataSetDelegate?.emptyDataSetShouldDisplay(in: self) ?? true
     }
 
+    fileprivate func emptyDataSetShouldForceDisplayImageView() -> Bool {
+        return emptyDataSetDelegate?.emptyDataSetShouldForceDisplayImageView(in: self) ?? false
+    }
+
     fileprivate func emptyDataSetTapEnabled() -> Bool {
         return emptyDataSetDelegate?.emptyDataSetTapEnabled(in: self) ?? true
     }
@@ -215,11 +219,13 @@ extension UIScrollView {
         emptyDataView.verticalOffset = emptyDataSetVerticalOffset()
         emptyDataView.verticalSpaces = emptyDataSetVerticalSpaces()
 
+        emptyDataView.shouldForceShowImageView = emptyDataSetShouldForceDisplayImageView()
         if let customView = emptyDataSetCustomView() {
             emptyDataView.customView = customView
         } else {
             if let customImageView = emptyDataSetImageView() {
                 emptyDataView.imageView = customImageView
+                emptyDataView.contentView.addSubview(emptyDataView.imageView)
             } else if let imageTintColor = emptyDataSetImageTintColor() {
                 emptyDataView.imageView.image = emptyDataSetImage()?.withRenderingMode(.alwaysTemplate)
                 emptyDataView.imageView.tintColor = imageTintColor

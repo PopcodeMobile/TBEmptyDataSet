@@ -76,10 +76,11 @@ internal class EmptyDataView: UIView {
     internal var tapGesture: UITapGestureRecognizer?
     internal var verticalOffset = DefaultValues.verticalOffset
     internal var verticalSpaces = DefaultValues.verticalSpaces
+    internal var shouldForceShowImageView = false
 
     // MARK: - Helper
     fileprivate func shouldShowImageView() -> Bool {
-        return imageView.image != nil
+        return imageView.image != nil || shouldForceShowImageView
     }
 
     fileprivate func shouldShowTitleLabel() -> Bool {
@@ -157,6 +158,11 @@ internal class EmptyDataView: UIView {
                 views[viewString] = imageView
 
                 contentView.addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerX, relatedBy: .equal, toItem: contentView, attribute: .centerX, multiplier: 1, constant: 0))
+
+                if imageView.image == nil {
+                    contentView.addConstraint(NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1/4, constant: 0))
+                    contentView.addConstraint(NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 1, constant: 0))
+                }
             } else {
                 imageView.removeFromSuperview()
             }
