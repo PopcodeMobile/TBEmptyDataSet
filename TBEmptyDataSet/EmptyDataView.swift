@@ -77,10 +77,11 @@ internal class EmptyDataView: UIView {
     internal var verticalOffset = DefaultValues.verticalOffset
     internal var verticalSpaces = DefaultValues.verticalSpaces
     internal var shouldForceShowImageView = false
+    internal var forcedImageViewSize: CGFloat = DefaultValues.forcedImageViewSize
 
     // MARK: - Helper
     fileprivate func shouldShowImageView() -> Bool {
-        return imageView.image != nil || shouldForceShowImageView
+        return imageView.image != nil
     }
 
     fileprivate func shouldShowTitleLabel() -> Bool {
@@ -149,7 +150,7 @@ internal class EmptyDataView: UIView {
             var viewStrings = [String]()
             var views = [String: UIView]()
 
-            if shouldShowImageView() {
+            if shouldShowImageView() || shouldForceShowImageView {
                 if imageView.superview == nil {
                     contentView.addSubview(imageView)
                 }
@@ -159,8 +160,8 @@ internal class EmptyDataView: UIView {
 
                 contentView.addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerX, relatedBy: .equal, toItem: contentView, attribute: .centerX, multiplier: 1, constant: 0))
 
-                if imageView.image == nil {
-                    contentView.addConstraint(NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1/4, constant: 0))
+                if shouldForceShowImageView {
+                    contentView.addConstraint(NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: forcedImageViewSize))
                     contentView.addConstraint(NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 1, constant: 0))
                 }
             } else {
@@ -174,6 +175,7 @@ internal class EmptyDataView: UIView {
                 let viewString = ViewStrings.titleLabel
                 viewStrings.append(viewString)
                 views[viewString] = titleLabel
+
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[\(ViewStrings.titleLabel)(>=0)]-|", options: [], metrics: nil, views: [ViewStrings.titleLabel: titleLabel]))
             } else {
                 titleLabel.removeFromSuperview()
@@ -203,6 +205,7 @@ internal class EmptyDataView: UIView {
             if !verticalFormat.isEmpty {
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|\(verticalFormat)|", options: [], metrics: nil, views: views))
             }
+
         }
     }
 
