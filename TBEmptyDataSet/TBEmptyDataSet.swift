@@ -123,6 +123,10 @@ extension UIScrollView {
         return emptyDataSetDelegate?.emptyDataSetScrollEnabled(in: self) ?? false
     }
 
+    fileprivate func emptyDataSetForcedImageViewSize() -> CGFloat {
+        return emptyDataSetDelegate?.emptyDataSetForcedImageViewSize(in: self) ?? DefaultValues.forcedImageViewSize
+    }
+
     // MARK: - Helper
     func didTapEmptyDataView(_ sender: Any) {
         emptyDataSetDelegate?.emptyDataSetDidTapEmptyView(in: self)
@@ -220,12 +224,13 @@ extension UIScrollView {
         emptyDataView.verticalSpaces = emptyDataSetVerticalSpaces()
 
         emptyDataView.shouldForceShowImageView = emptyDataSetShouldForceDisplayImageView()
+        emptyDataView.forcedImageViewSize = emptyDataSetForcedImageViewSize()
         if let customView = emptyDataSetCustomView() {
             emptyDataView.customView = customView
         } else {
             if let customImageView = emptyDataSetImageView() {
+                emptyDataView.imageView.removeFromSuperview()
                 emptyDataView.imageView = customImageView
-                emptyDataView.contentView.addSubview(emptyDataView.imageView)
             } else if let imageTintColor = emptyDataSetImageTintColor() {
                 emptyDataView.imageView.image = emptyDataSetImage()?.withRenderingMode(.alwaysTemplate)
                 emptyDataView.imageView.tintColor = imageTintColor
@@ -245,7 +250,6 @@ extension UIScrollView {
 
         emptyDataView.setConstraints()
         emptyDataView.layoutIfNeeded()
-
         emptyDataSetDelegate?.emptyDataSetDidAppear(in: self)
     }
 

@@ -33,6 +33,7 @@ public protocol TBEmptyDataSetDelegate {
     func emptyDataSetWillDisappear(in scrollView: UIScrollView)
     func emptyDataSetDidDisappear(in scrollView: UIScrollView)
     func emptyDataSetShouldForceDisplayImageView(in scrollView: UIScrollView) -> Bool
+    func emptyDataSetForcedImageViewSize(in scrollView: UIScrollView) -> CGFloat
 }
 
 public extension TBEmptyDataSetDataSource {
@@ -108,5 +109,9 @@ public extension TBEmptyDataSetDelegate {
 
     func emptyDataSetShouldForceDisplayImageView(in scrollView: UIScrollView) -> Bool {
         return false
+    }
+
+    func emptyDataSetForcedImageViewSize(in scrollView: UIScrollView) -> CGFloat {
+        return DefaultValues.forcedImageViewSize
     }
 }
