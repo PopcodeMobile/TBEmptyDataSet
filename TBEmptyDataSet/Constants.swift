@@ -39,4 +39,6 @@ internal struct DefaultValues {
     static let verticalSpace: CGFloat = 12
     static let verticalSpaces = [verticalSpace, verticalSpace]
     static let forcedImageViewSize: CGFloat = 80
+    static let titleMargin: CGFloat = 15
+    static let descriptionMargin: CGFloat = 15
 }

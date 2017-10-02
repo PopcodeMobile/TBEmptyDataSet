@@ -103,6 +103,14 @@ extension UIScrollView {
         return emptyDataSetDataSource?.verticalSpacesForEmptyDataSet(in: self) ?? DefaultValues.verticalSpaces
     }
 
+    fileprivate func emptyDataSetTitleMargin() -> CGFloat {
+        return emptyDataSetDataSource?.titleMarginForEmptyDataSet(in: self) ?? DefaultValues.titleMargin
+    }
+
+    fileprivate func emptyDataSetDescriptionMargin() -> CGFloat {
+        return emptyDataSetDataSource?.descriptionMarginForEmptyDataSet(in: self) ?? DefaultValues.descriptionMargin
+    }
+
     fileprivate func emptyDataSetCustomView() -> UIView? {
         return emptyDataSetDataSource?.customViewForEmptyDataSet(in: self)
     }
@@ -128,7 +136,7 @@ extension UIScrollView {
     }
 
     // MARK: - Helper
-    func didTapEmptyDataView(_ sender: Any) {
+    @objc func didTapEmptyDataView(_ sender: Any) {
         emptyDataSetDelegate?.emptyDataSetDidTapEmptyView(in: self)
     }
 
@@ -143,7 +151,7 @@ extension UIScrollView {
     }
 
     fileprivate func emptyDataSetAvailable() -> Bool {
-        if let _ = emptyDataSetDataSource {
+        if emptyDataSetDataSource != nil {
             return (self is UITableView) || (self is UICollectionView)
         }
         return false
@@ -222,6 +230,8 @@ extension UIScrollView {
 
         emptyDataView.verticalOffset = emptyDataSetVerticalOffset()
         emptyDataView.verticalSpaces = emptyDataSetVerticalSpaces()
+        emptyDataView.titleMargin = emptyDataSetTitleMargin()
+        emptyDataView.descriptionMargin = emptyDataSetDescriptionMargin()
 
         emptyDataView.shouldForceShowImageView = emptyDataSetShouldForceDisplayImageView()
         emptyDataView.forcedImageViewSize = emptyDataSetForcedImageViewSize()
@@ -255,8 +265,9 @@ extension UIScrollView {
 
     // MARK: - Method swizzling
     fileprivate class func tb_swizzleMethod(for aClass: AnyClass, originalSelector: Selector, swizzledSelector: Selector) {
-        let originalMethod = class_getInstanceMethod(aClass, originalSelector)
-        let swizzledMethod = class_getInstanceMethod(aClass, swizzledSelector)
+        guard let originalMethod = class_getInstanceMethod(aClass, originalSelector), let swizzledMethod = class_getInstanceMethod(aClass, swizzledSelector) else {
+            return
+        }
 
         let didAddMethod = class_addMethod(aClass, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
 
@@ -299,21 +310,25 @@ extension UIScrollView {
         tb_swizzleMethod(for: UICollectionView.self, originalSelector: originalSelector, swizzledSelector: swizzledSelector)
     }()
 
+    @objc
     func tb_tableViewSwizzledReloadData() {
         tb_tableViewSwizzledReloadData()
         reloadEmptyDataSet()
     }
 
+    @objc
     func tb_tableViewSwizzledEndUpdates() {
         tb_tableViewSwizzledEndUpdates()
         reloadEmptyDataSet()
     }
 
+    @objc
     func tb_collectionViewSwizzledReloadData() {
         tb_collectionViewSwizzledReloadData()
         reloadEmptyDataSet()
     }
 
+    @objc
     func tb_collectionViewSwizzledPerformBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
         tb_collectionViewSwizzledPerformBatchUpdates(updates) { [weak self](completed) in
             completion?(completed)

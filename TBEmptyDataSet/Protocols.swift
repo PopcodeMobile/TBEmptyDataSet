@@ -19,6 +19,8 @@ public protocol TBEmptyDataSetDataSource {
 
     func verticalOffsetForEmptyDataSet(in scrollView: UIScrollView) -> CGFloat
     func verticalSpacesForEmptyDataSet(in scrollView: UIScrollView) -> [CGFloat]
+    func titleMarginForEmptyDataSet(in scrollView: UIScrollView) -> CGFloat
+    func descriptionMarginForEmptyDataSet(in scrollView: UIScrollView) -> CGFloat
 
     func customViewForEmptyDataSet(in scrollView: UIScrollView) -> UIView?
 }
@@ -67,6 +69,14 @@ public extension TBEmptyDataSetDataSource {
 
     func verticalSpacesForEmptyDataSet(in scrollView: UIScrollView) -> [CGFloat] {
         return DefaultValues.verticalSpaces
+    }
+
+    func titleMarginForEmptyDataSet(in scrollView: UIScrollView) -> CGFloat {
+        return DefaultValues.titleMargin
+    }
+
+    func descriptionMarginForEmptyDataSet(in scrollView: UIScrollView) -> CGFloat {
+        return DefaultValues.descriptionMargin
     }
 
     func customViewForEmptyDataSet(in scrollView: UIScrollView) -> UIView? {
